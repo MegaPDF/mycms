@@ -1,6 +1,4 @@
 <?php
-// app/Http/Controllers/Api/PluginController.php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -8,9 +6,9 @@ use App\Http\Requests\PluginUploadRequest;
 use App\Models\Plugin;
 use App\Services\PluginService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class PluginController extends Controller
+class PluginController extends BaseController
 {
     protected PluginService $pluginService;
 

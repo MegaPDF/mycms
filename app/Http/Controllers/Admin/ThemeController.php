@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Theme;
 use App\Services\ThemeService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ThemeController extends Controller
+class ThemeController extends BaseController
 {
     protected ThemeService $themeService;
 

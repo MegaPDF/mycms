@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-
-class ProfileController extends Controller
+use Illuminate\Routing\Controller as BaseController;
+class ProfileController extends BaseController
 {
     /**
      * Show the user's profile settings page.
@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+            $request->user()->markEmailAsUnverified();
         }
 
         $request->user()->save();

@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\FileUploadService;
+use App\Services\PluginService;
+use App\Services\ThemeService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register core services
+        $this->app->singleton(FileUploadService::class);
+        $this->app->singleton(PluginService::class);
+        $this->app->singleton(ThemeService::class);
     }
 
     /**

@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Plugin;
 use App\Services\PluginService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PluginController extends Controller
+class PluginController extends BaseController
 {
     protected PluginService $pluginService;
 

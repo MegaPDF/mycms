@@ -8,8 +8,8 @@ use App\Models\Theme;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
-
-class DashboardController extends Controller
+use Illuminate\Routing\Controller as BaseController;
+class DashboardController extends BaseController
 {
     public function __construct()
     {

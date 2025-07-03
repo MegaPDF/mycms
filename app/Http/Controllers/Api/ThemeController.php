@@ -6,9 +6,9 @@ use App\Http\Requests\ThemeUploadRequest;
 use App\Models\Theme;
 use App\Services\ThemeService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 
-class ThemeController extends Controller
+class ThemeController extends BaseController
 {
     protected ThemeService $themeService;
 
