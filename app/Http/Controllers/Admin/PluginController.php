@@ -29,6 +29,16 @@ class PluginController extends BaseController
         ]);
     }
 
+    // 👈 ADD THIS METHOD
+    public function show(Plugin $plugin): Response
+    {
+        $pluginInfo = $this->pluginService->getPluginInfo($plugin);
+
+        return Inertia::render('admin/plugin-detail', [
+            'plugin' => array_merge($plugin->toArray(), ['info' => $pluginInfo]),
+        ]);
+    }
+
     public function toggle(Plugin $plugin): RedirectResponse
     {
         try {

@@ -59,7 +59,9 @@ export default function Plugins({ plugins }: PluginsProps) {
             setSelectedFile(file);
         }
     };
-
+    const handleViewDetails = () => {
+        router.visit(`/admin/plugins/${plugins[0].id}`); // Assuming you want to view details of the first plugin for now
+    };
     const handleUpload = async () => {
         if (!selectedFile) return;
 
@@ -183,7 +185,13 @@ export default function Plugins({ plugins }: PluginsProps) {
                         {filteredPlugins.length > 0 ? (
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {filteredPlugins.map((plugin) => (
-                                    <PluginCard key={plugin.id} plugin={plugin} />
+                                    <PluginCard
+                                        key={plugin.id}
+                                        plugin={plugin}
+                                        onViewDetails={() => {
+                                            handleViewDetails;
+                                        }}
+                                    />
                                 ))}
                             </div>
                         ) : (
@@ -209,7 +217,13 @@ export default function Plugins({ plugins }: PluginsProps) {
                         {activePlugins.length > 0 ? (
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {activePlugins.map((plugin) => (
-                                    <PluginCard key={plugin.id} plugin={plugin} />
+                                    <PluginCard
+                                        key={plugin.id}
+                                        plugin={plugin}
+                                        onViewDetails={() => {
+                                            handleViewDetails;
+                                        }}
+                                    />
                                 ))}
                             </div>
                         ) : (
@@ -227,7 +241,13 @@ export default function Plugins({ plugins }: PluginsProps) {
                         {inactivePlugins.length > 0 ? (
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {inactivePlugins.map((plugin) => (
-                                    <PluginCard key={plugin.id} plugin={plugin} />
+                                    <PluginCard
+                                        key={plugin.id}
+                                        plugin={plugin}
+                                        onViewDetails={() => {
+                                            handleViewDetails;
+                                        }}
+                                    />
                                 ))}
                             </div>
                         ) : (

@@ -74,15 +74,17 @@ class FileUploadService
 
         return false;
     }
-
-    public function scanForMaliciousFiles(string $directory): array
+    public function scanForMaliciousFilesInPlugin(string $directory): array
     {
+        // For plugins, only block truly dangerous files, not PHP
         $maliciousPatterns = [
-            '*.php',
             '*.exe',
             '*.bat',
             '*.sh',
             '*.ps1',
+            '*.scr',
+            '*.com',
+            '*.pif'
         ];
 
         $suspiciousFiles = [];
