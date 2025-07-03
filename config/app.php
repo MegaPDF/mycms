@@ -122,5 +122,16 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    'providers' => [
+        Nwidart\Modules\LaravelModulesServiceProvider::class,
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
+        App\Providers\PluginServiceProvider::class,
+        App\Providers\ThemeServiceProvider::class,
+    ],
+
+    'aliases' => [
+        'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
+        'Module' => Nwidart\Modules\Facades\Module::class,
+    ]
 
 ];
