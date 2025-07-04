@@ -25,7 +25,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // 🔧 NEW: Plugin interface routes (admin-wrapped plugin views)
     Route::get('/plugins/{plugin}/interface', [PluginController::class, 'interface'])->name('plugins.interface');
     Route::get('/plugins/{plugin}/dashboard', [PluginController::class, 'dashboard'])->name('plugins.dashboard');
-
+    Route::get('/plugins/{plugin}/files', [PluginController::class, 'getFiles'])->name('plugins.files');
     Route::put('/plugins/{plugin}/toggle', [PluginController::class, 'toggle'])->name('plugins.toggle');
     Route::delete('/plugins/{plugin}', [PluginController::class, 'destroy'])->name('plugins.destroy');
 
