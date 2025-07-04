@@ -1,4 +1,5 @@
 <?php
+// Updated routes/admin.php
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PluginController;
@@ -19,7 +20,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Plugins Management
     Route::get('/plugins', [PluginController::class, 'index'])->name('plugins.index');
-    Route::get('/plugins/{plugin}', [PluginController::class, 'show'])->name('plugins.show'); // 👈 ADD THIS
+    Route::get('/plugins/{plugin}', [PluginController::class, 'show'])->name('plugins.show');
+
+    // 🔧 NEW: Plugin interface routes (admin-wrapped plugin views)
+    Route::get('/plugins/{plugin}/interface', [PluginController::class, 'interface'])->name('plugins.interface');
+    Route::get('/plugins/{plugin}/dashboard', [PluginController::class, 'dashboard'])->name('plugins.dashboard');
+
     Route::put('/plugins/{plugin}/toggle', [PluginController::class, 'toggle'])->name('plugins.toggle');
     Route::delete('/plugins/{plugin}', [PluginController::class, 'destroy'])->name('plugins.destroy');
 
@@ -41,8 +47,6 @@ Route::prefix('api')->name('api.')->middleware(['auth', 'role:admin,super_admin'
         Route::get('/', [ApiPluginController::class, 'index'])->name('index');
         Route::post('/upload', [ApiPluginController::class, 'upload'])->name('upload');
         Route::get('/{plugin}', [ApiPluginController::class, 'show'])->name('show');
-        // routes/admin.php
-        Route::get('/plugins/{plugin}', [PluginController::class, 'show'])->name('plugins.show');
         Route::put('/{plugin}/toggle', [ApiPluginController::class, 'toggle'])->name('toggle');
         Route::delete('/{plugin}', [ApiPluginController::class, 'destroy'])->name('destroy');
     });

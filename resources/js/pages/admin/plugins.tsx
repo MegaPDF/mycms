@@ -1,3 +1,5 @@
+// Fixed resources/js/pages/admin/plugins.tsx
+
 import { Head, router } from '@inertiajs/react';
 import { Package, Plus, Search, Upload } from 'lucide-react';
 import { useState } from 'react';
@@ -59,8 +61,11 @@ export default function Plugins({ plugins }: PluginsProps) {
             setSelectedFile(file);
         }
     };
-    const handleViewDetails = () => {
-        router.visit(`/admin/plugins/${plugins[0].id}`); // Assuming you want to view details of the first plugin for now
+
+    // 🔧 FIX: Proper function that takes plugin parameter
+    const handleViewDetails = (plugin: Plugin) => {
+        console.log('🚀 navigating to plugin detail:', plugin.id);
+        router.visit(`/admin/plugins/${plugin.id}`);
     };
     const handleUpload = async () => {
         if (!selectedFile) return;
@@ -112,24 +117,25 @@ export default function Plugins({ plugins }: PluginsProps) {
                                 <div className="grid gap-2">
                                     <Label htmlFor="plugin-file">Plugin File</Label>
                                     <Input id="plugin-file" type="file" accept=".zip" onChange={handleFileSelect} />
-                                    <p className="text-xs text-muted-foreground">Upload a .zip file containing your plugin files.</p>
+                                    <p className="text-xs text-muted-foreground">Upload a ZIP file containing your plugin.</p>
                                 </div>
-                                {selectedFile && (
-                                    <div className="rounded-lg border p-3">
-                                        <div className="flex items-center gap-2">
-                                            <Upload className="h-4 w-4 text-muted-foreground" />
-                                            <span className="text-sm font-medium">{selectedFile.name}</span>
-                                        </div>
-                                        <p className="mt-1 text-xs text-muted-foreground">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                                    </div>
-                                )}
                             </div>
                             <DialogFooter>
                                 <Button variant="outline" onClick={() => setShowUploadDialog(false)}>
                                     Cancel
                                 </Button>
                                 <Button onClick={handleUpload} disabled={!selectedFile || isUploading}>
-                                    {isUploading ? 'Uploading...' : 'Upload Plugin'}
+                                    {isUploading ? (
+                                        <>
+                                            <Upload className="mr-2 h-4 w-4 animate-spin" />
+                                            Uploading...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Upload className="mr-2 h-4 w-4" />
+                                            Upload
+                                        </>
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </DialogContent>
@@ -137,81 +143,20 @@ export default function Plugins({ plugins }: PluginsProps) {
                 </div>
 
                 {/* Search */}
-                <div className="relative max-w-md">
-                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input placeholder="Search plugins..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
-                </div>
-
-                {/* Plugin Statistics */}
-                <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Plugins</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{plugins.length}</div>
-                            <p className="text-xs text-muted-foreground">Installed plugins</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Plugins</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{activePlugins.length}</div>
-                            <p className="text-xs text-muted-foreground">Currently running</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Inactive Plugins</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{inactivePlugins.length}</div>
-                            <p className="text-xs text-muted-foreground">Available to activate</p>
-                        </CardContent>
-                    </Card>
+                <div className="flex items-center space-x-2">
+                    <div className="relative flex-1">
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
+                        <Input placeholder="Search plugins..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+                    </div>
                 </div>
 
                 {/* Plugin Tabs */}
-                <Tabs defaultValue="all" className="space-y-4">
-                    <TabsList>
-                        <TabsTrigger value="all">All Plugins ({filteredPlugins.length})</TabsTrigger>
+                <Tabs defaultValue="active" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="active">Active ({activePlugins.length})</TabsTrigger>
                         <TabsTrigger value="inactive">Inactive ({inactivePlugins.length})</TabsTrigger>
+                        <TabsTrigger value="all">All ({plugins.length})</TabsTrigger>
                     </TabsList>
-
-                    <TabsContent value="all" className="space-y-4">
-                        {filteredPlugins.length > 0 ? (
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {filteredPlugins.map((plugin) => (
-                                    <PluginCard
-                                        key={plugin.id}
-                                        plugin={plugin}
-                                        onViewDetails={() => {
-                                            handleViewDetails;
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <Card>
-                                <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-                                    <Package className="mb-4 h-12 w-12 text-muted-foreground" />
-                                    <h3 className="mb-2 text-lg font-medium">No plugins found</h3>
-                                    <p className="mb-4 text-sm text-muted-foreground">
-                                        {searchTerm ? 'No plugins match your search criteria.' : 'Get started by uploading your first plugin.'}
-                                    </p>
-                                    {!searchTerm && (
-                                        <Button onClick={() => setShowUploadDialog(true)}>
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Upload Plugin
-                                        </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        )}
-                    </TabsContent>
 
                     <TabsContent value="active" className="space-y-4">
                         {activePlugins.length > 0 ? (
@@ -220,9 +165,7 @@ export default function Plugins({ plugins }: PluginsProps) {
                                     <PluginCard
                                         key={plugin.id}
                                         plugin={plugin}
-                                        onViewDetails={() => {
-                                            handleViewDetails;
-                                        }}
+                                        onViewDetails={handleViewDetails} // 🔧 FIX: Pass the actual function
                                     />
                                 ))}
                             </div>
@@ -244,9 +187,7 @@ export default function Plugins({ plugins }: PluginsProps) {
                                     <PluginCard
                                         key={plugin.id}
                                         plugin={plugin}
-                                        onViewDetails={() => {
-                                            handleViewDetails;
-                                        }}
+                                        onViewDetails={handleViewDetails} // 🔧 FIX: Pass the actual function
                                     />
                                 ))}
                             </div>
@@ -256,6 +197,30 @@ export default function Plugins({ plugins }: PluginsProps) {
                                     <Package className="mb-4 h-12 w-12 text-muted-foreground" />
                                     <h3 className="mb-2 text-lg font-medium">No inactive plugins</h3>
                                     <p className="text-sm text-muted-foreground">All installed plugins are currently active.</p>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="all" className="space-y-4">
+                        {filteredPlugins.length > 0 ? (
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                {filteredPlugins.map((plugin) => (
+                                    <PluginCard
+                                        key={plugin.id}
+                                        plugin={plugin}
+                                        onViewDetails={handleViewDetails} // 🔧 FIX: Pass the actual function
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <Card>
+                                <CardContent className="flex flex-col items-center justify-center py-8 text-center">
+                                    <Package className="mb-4 h-12 w-12 text-muted-foreground" />
+                                    <h3 className="mb-2 text-lg font-medium">No plugins found</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {searchTerm ? 'Try adjusting your search terms.' : 'Upload your first plugin to get started.'}
+                                    </p>
                                 </CardContent>
                             </Card>
                         )}
